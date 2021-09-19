@@ -5,10 +5,24 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './theme';
 import { GlobalStyles } from './global';
 
+import { createTheme } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
+
+const theme = createTheme({
+  palette: {
+    primary: purple,
+    secondary: green,
+  },
+  status: {
+    danger: 'orange',
+  },
+});
+
 function App() {
   return (
       <div className="App">
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
         <header className="App-header">
           <GlobalStyles />
           <MUIButton
