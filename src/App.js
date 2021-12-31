@@ -1,6 +1,7 @@
-import logo from './logo.svg';
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import './App.css';
-import MUIButton from '@material-ui/core/Button';
 import namesData from './assets/data/names.json'
 import {ThemeProvider} from 'styled-components';
 import {lightTheme, darkTheme} from './theme';
@@ -8,14 +9,6 @@ import {lightTheme, darkTheme} from './theme';
 import {GlobalStyles} from './global';
 import {createTheme} from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
-import {TextField} from "@material-ui/core";
-import {Autocomplete} from "@mui/material";
-
-const pageConfigState = {
-  "showAutocompletePage": false,
-  "showHomePage": true
-}
-const names = Array.from(new Set(namesData.names));
 
 const theme = createTheme(createTheme({
   palette: {
@@ -50,26 +43,10 @@ function App() {
             <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={names}
-                sx={{width: 300}}
-                renderInput={(params) => <TextField {...params} label="Names"/>}
+                options={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Name" />}
             />
-            <MUIButton
-                color="primary"
-                variant="contained"
-            >TEST</MUIButton>
-            <img src={logo} className="App-logo" alt="logo"/>
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
           </header>
         </ThemeProvider>
       </div>
