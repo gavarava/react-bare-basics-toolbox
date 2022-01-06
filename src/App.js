@@ -9,6 +9,8 @@ import {lightTheme, darkTheme} from './theme';
 import {GlobalStyles} from './global';
 import {createTheme} from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
+import {useEffect, useState} from "react";
+import AsyncAutoComplete from "./components/AsyncAutoComplete";
 
 const theme = createTheme(createTheme({
   palette: {
@@ -40,17 +42,12 @@ function App() {
         <ThemeProvider theme={theme}>
           <header className="App-header">
             <GlobalStyles/>
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Name" />}
-            />
+            <AsyncAutoComplete
+                data={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}/>
           </header>
         </ThemeProvider>
       </div>
   );
-}
+};
 
 export default App;
