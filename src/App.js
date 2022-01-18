@@ -11,6 +11,7 @@ import {createTheme} from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import {useEffect, useState} from "react";
 import AsyncAutoComplete from "./components/AsyncAutoComplete";
+import {Container, Grid, ImageList} from "@material-ui/core";
 
 const theme = createTheme(createTheme({
   palette: {
@@ -42,8 +43,24 @@ function App() {
         <ThemeProvider theme={theme}>
           <header className="App-header">
             <GlobalStyles/>
-            <AsyncAutoComplete
-                data={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}/>
+            <Container maxWidth="sm">
+              <Grid>
+                <ImageList>
+                  <div>
+                    <AsyncAutoComplete
+                        label="Large DB"
+                        data={/*["Saphira", "Tom", "Betsy-May", "Larry-Huges"]*/ namesData.names}/>
+                  </div>
+                </ImageList>
+              </Grid>
+              <ImageList>
+              <div>
+                <AsyncAutoComplete
+                    label="Very Small DB"
+                    data={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}/>
+              </div>
+              </ImageList>
+            </Container>
           </header>
         </ThemeProvider>
       </div>
