@@ -17,9 +17,8 @@ function indexData(array) {
   return indexedData
 }
 
-export default function AsyncAutoComplete(props) {
-  const data = props.data
-  const index = indexData(data)
+export default function AsyncAutoComplete({data, label}) {
+  //const index = indexData(data)
   const [open, setOpen] = React.useState(false)
   const [options, setOptions] = React.useState([])
   const [typedKeywordToSearch, setTypedKeywordToSearch] = React.useState('')
@@ -27,19 +26,21 @@ export default function AsyncAutoComplete(props) {
 
   React.useEffect(() => {
     console.log("typedKeywordToSearch::::" + typedKeywordToSearch)
+
     async function searchStringInArray() {
       console.log("INSIDE searchStringInArray::::" + typedKeywordToSearch)
       const array = data
       console.info("USING DATA SET OF LENGTH:::: " + array.length)
       return new Promise((resolve, reject) => {
         if (array === undefined || typedKeywordToSearch === undefined) {
-          return reject("Invalid Arguments to searchStringInArray(). Set typedKeywordToSearch and pass an array in props.data")
+          return reject(
+              "Invalid Arguments to searchStringInArray(). Set typedKeywordToSearch and pass an array in props.data")
         } else {
 
           let searchResultsSet = new Set()
-          let dataSet = typedKeywordToSearch.length > 1 ? index.get(typedKeywordToSearch.substring(0, 1)) : new Set().add(typedKeywordToSearch)
+          let dataSet = new Set(data)
+          // typedKeywordToSearch.length > 1 ? index.get(typedKeywordToSearch.substring(0, 1)) : new Set().add(typedKeywordToSearch)
           console.log("USING INDEXED DATA SET OF LENGTH:::: " + dataSet.size)
-          console.log("INDEXED DATA:::: " + dataSet.join(' '))
           dataSet.forEach(item => {
             console.log("item ==> " + item)
             console.log("searchString ==> " + typedKeywordToSearch)
@@ -51,7 +52,7 @@ export default function AsyncAutoComplete(props) {
           })
           console.log("Resolving 2::::" + searchResultsSet.size + " --- "
               + searchResultsSet)
-          return resolve(() => Array.from(searchResultsSet))
+          return resolve(Array.from(searchResultsSet))
         }
       })
     }
@@ -66,18 +67,16 @@ export default function AsyncAutoComplete(props) {
       return
     }
 
-    (async () => {
-      // Async Await to search large dataset without freezing window
-      await searchStringInArray()
-      .then(value => {
-        console.log("value inside promise:::: " + value)
-        if (active) {
-          setOptions(value)
-        }
-      })
-      .catch(reason => console.error(reason))
-      .finally(() => console.log("FINALLY"))
-    })()
+    // Async Await to search large dataset without freezing window
+    searchStringInArray()
+    .then(value => {
+      console.log("value inside promise:::: " + value)
+      if (active) {
+        setOptions(value)
+      }
+    })
+    .catch(reason => console.error(reason))
+    .finally(() => console.log("FINALLY"))
 
     return () => {
       active = false
@@ -112,7 +111,7 @@ export default function AsyncAutoComplete(props) {
           renderInput={(params) => (
               <TextField
                   {...params}
-                  label={props.label}
+                  label={label}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
