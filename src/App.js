@@ -1,17 +1,16 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import {useState} from 'react';
 import './App.css';
 import namesData from './assets/data/names.json'
 import {ThemeProvider} from 'styled-components';
-import {lightTheme, darkTheme} from './theme';
 
 import {GlobalStyles} from './global';
 import {createTheme} from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import {useEffect, useState} from "react";
 import AsyncAutoComplete from "./components/AsyncAutoComplete";
-import {Container, Grid, ImageList} from "@material-ui/core";
+import {Button, Container, Grid, ImageList} from "@material-ui/core";
+import SimpleTextInputSubmit from "./components/SimpleTextInputSubmit";
+import {Stack} from "@mui/material";
+import Header from "./components/Header";
 
 const theme = createTheme(createTheme({
   palette: {
@@ -38,32 +37,85 @@ const theme = createTheme(createTheme({
 }));
 
 function App() {
+  const [selectedDemo, setSelectedDemo] = useState('home')
+  const handleSelectDemo = (pageState) => {
+    setSelectedDemo(pageState)
+  }
+
   return (
-      <div className="App">
-        <ThemeProvider theme={theme}>
-          <header className="App-header">
-            <GlobalStyles/>
-            <Container maxWidth="sm">
-              <Grid>
-                <ImageList>
-                  <div>
-                    <AsyncAutoComplete
-                        label="Large DB"
-                        data={/*["Saphira", "Tom", "Betsy-May", "Larry-Huges"]*/ namesData.names}/>
-                  </div>
-                </ImageList>
-              </Grid>
-              <ImageList>
-              <div>
-                <AsyncAutoComplete
-                    label="Very Small DB"
-                    data={["Saphira", "Tom", "Betsy-May", "Larry-Huges"]}/>
-              </div>
-              </ImageList>
-            </Container>
-          </header>
-        </ThemeProvider>
-      </div>
+
+      <ThemeProvider theme={theme}>
+        <header className="App-header">
+          <Header headerButtonAction={() => handleSelectDemo('home')} headerButtonValue={"Home"}/>
+        </header>
+        <div className="App-body">
+        {(() => {
+          switch (selectedDemo) {
+            case 'home':
+              return (
+                  <Container maxWidth="lg">
+                    <Stack spacing={5} sx={{ width: 300 }}>
+                    <Grid>
+                      <Button name={"Submit"} variant={"contained"}
+                              color={"secondary"}
+                              onClick={() => handleSelectDemo(
+                                  'SimpleTextInputSubmit')}>SimpleTextInputSubmit</Button>
+                    </Grid>
+                    <Grid>
+                      <Button name={"Submit"} variant={"contained"}
+                              color={"secondary"}
+                              onClick={() => handleSelectDemo(
+                                  'AsyncAutoComplete with Large DB')}>AsyncAutoComplete
+                        with Large DB'</Button>
+                    </Grid>
+                    <Grid>
+                      <Button name={"Submit"} variant={"contained"}
+                              color={"secondary"}
+                              onClick={() => handleSelectDemo(
+                                  'AsyncAutoComplete Very Small DB')}>AsyncAutoComplete
+                        Very Small DB</Button>
+                    </Grid>
+                    </Stack>
+                  </Container>
+
+              )
+            case 'SimpleTextInputSubmit':
+              return (
+                  <Container maxWidth="lg">
+                    <Grid>
+                      <SimpleTextInputSubmit/>
+                    </Grid>
+                  </Container>
+              )
+            case 'AsyncAutoComplete with Large DB':
+              return (
+                  <Container maxWidth="sm">
+                    <Grid>
+                      <ImageList>
+                        <AsyncAutoComplete
+                            label="Large DB"
+                            data={/*["Saphira", "Tom", "Betsy-May", "Larry-Huges"]*/ namesData.names}/>
+                      </ImageList>
+                    </Grid>
+                  </Container>
+              )
+            case 'AsyncAutoComplete Very Small DB':
+              return (
+                  <Container maxWidth="sm">
+                    <ImageList>
+                      <AsyncAutoComplete
+                          label="Very Small DB"
+                          data={["Saphira", "Tom", "Betsy-May",
+                            "Larry-Huges"]}/>
+                    </ImageList>
+                  </Container>
+              )
+            default:
+              return null
+          }
+        })()}
+        </div>
+      </ThemeProvider>
   );
 };
 
